@@ -28,11 +28,18 @@ mypath = os.getcwd()
 
 
 
-w = os.walk(mypath)
-d = w.__dir__
-
-print(d)
-
 # print(d)
 # for dirpath, dirs, files in os.walk(mypath):
 #     print(dirs)
+
+import os 
+from pathlib import Path
+
+path = Path.home()
+
+size = 1024*1024
+
+large_files = [e for e in path.rglob('*.*') if e.is_file() and os.path.getsize(e) >= size]
+
+for file in large_files:
+    print(f'{file} {os.path.getsize(file)}')
