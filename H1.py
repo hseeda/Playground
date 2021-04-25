@@ -25,3 +25,5 @@ for dirpath, dirs, files in os.walk(mypath):
   for file in files:
     file_name = os.path.join(dirpath, file)
     print(file_name)
+
+    
