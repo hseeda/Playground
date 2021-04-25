@@ -32,14 +32,38 @@ mypath = os.getcwd()
 # for dirpath, dirs, files in os.walk(mypath):
 #     print(dirs)
 
-import os 
+# import os 
+# from pathlib import Path
+# path = Path.home()
+# size = 1024*1024
+# large_files = [e for e in path.rglob('*.*') if e.is_file() and os.path.getsize(e) >= size]
+# for file in large_files:
+#     print(f'{file} {os.path.getsize(file)}')
+
+# from prettytable import PrettyTable
+# from pathlib import Path
+# import time
+# pt = PrettyTable()
+# path = Path.cwd()
+# all_files = []
+# pt.field_names = ['File name', 'Suffix', 'Created']
+# for e in path.rglob('*.*'):
+#     pt.add_row((e.name, e.suffix, time.ctime(e.stat().st_ctime)))
+# print(pt)
+
+
+
+import pandas as pd
 from pathlib import Path
+import time
 
-path = Path.home()
+path = Path.cwd()
+all_files = []
 
-size = 1024*1024
+for e in path.rglob('*.*'):
+    all_files.append((e.name, e.parent, time.ctime(e.stat().st_ctime)))
 
-large_files = [e for e in path.rglob('*.*') if e.is_file() and os.path.getsize(e) >= size]
+columns = ['File_Name', 'Parent', 'Created']
+df = pd.DataFrame.from_records(all_files, columns=columns)
 
-for file in large_files:
-    print(f'{file} {os.path.getsize(file)}')
+print(df.head(5))
