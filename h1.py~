@@ -1,0 +1,47 @@
+import numpy as np
+
+class Layer:
+    def __init__(self, name,top,bot):
+        self.name = name
+        self.top = float(top)
+        self.bot =  float(bot)
+        self.thickness = float(abs(top - bot))
+    def a_gamma(self, gamma1, gamma2 = 0):
+        self.gamma_top = gamma1
+        if gamma2 == 0:
+            self.gamma_bot = gamma1
+        else:
+            self.gamma_bot = gamma2
+    def a_d(self,d,vt,vb):
+        if d > self.top:
+            return float(vt)
+        elif d < self.bot:
+            return float(vb)
+        else:
+            return vt + (vb-vt) / self.thickness * (self.top-d)
+
+    def a_h(self,h,vt,vb):
+        if h < 0:
+            return float(vt)
+        elif h > self.thickness:
+            return float(vb)
+        else:
+            return vt + (vb-vt) / self.thickness * h
+
+
+    def gamma(self,d=-9999,h=-9999):
+        if h == -9999:
+            if d == -9999:
+                return self.gamma_top
+            else:
+                return self.a_d(d,self.gamma_top,self.gamma_bot)
+        else:
+            return self.a_h(h,self.gamma_top,self.gamma_bot)
+
+
+
+p1 = Layer("Sand",0,-10)
+p1.a_gamma(17,19)
+
+print((p1.gamma(h=-9)))
+ 
