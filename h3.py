@@ -1,6 +1,5 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
@@ -188,7 +187,7 @@ class Profile:
                 flag=False
         return
 # ----------------------------------------------------------------
-    def setP0(self):
+    def setProps(self):
         pcum=0.0; p_cum=0.0
         g=0.0; gg=0.0
         
@@ -229,40 +228,6 @@ class Profile:
         plt.show()       
         return
 # ----------------------------------------------------------------
-    def setProps(self):
-        pcum=0.0; p_cum=0.0
-        g=0.0; gg=0.0
-        
-        inc = 0
-        dold = self.depth[0]
-        for d in self.depth:
-            inc = abs(dold - d)
-            pcum  += g * inc; 
-            p_cum += gg * inc
-            dold = d
-            l = self.getLayer(d)
-            g = l.gamma(d)
-
-
-            self.g.append(g)
-            self.C.append(l.C())
-            self.Fi.append(l.Fi())
-
-            if d <= self.gwt:
-                gg = g - 9.81
-            else:
-                gg=g
-    # ---------------------------------------------------
-            print("{:.2f}\t{:.2f}\t{:.2f}\t{:.2f}".format(d,g,l.C(),l.Fi()))
-    # ---------------------------------------------------
-        plt.plot(self.C,self.depth)
-        plt.plot(self.Fi,self.depth)
-        plt.ylabel('Depth, m')
-        plt.xlabel('Po, kPa')
-        plt.grid()
-        plt.show()
-        return
-# ----------------------------------------------------------------
 # ----------------------------------------------------------------
 # ----------------------------------------------------------------
 
@@ -283,16 +248,16 @@ if __name__ == "__main__":
     pr.addLayer("Sand_1",5)
     pr.current_layer.set_gamma(17,19)
     pr.current_layer.set_Fi(30,inc=.5)
+
     pr.addLayer("Clay",5)
-    
     pr.current_layer.set_gamma(14,17)
     pr.current_layer.set_C(20,inc=5)
 
     pr.addLayer("Sand_2",8)
     pr.current_layer.set_gamma(18,19)
-
     pr.current_layer.set_Fi(33,inc=.5)
-    pr.gwt = -3
+
+    pr.gwt = -6.0
     pr.print()
     pr.setDepth(-.1)
-    pr.setP0()
+    pr.setProps()
