@@ -220,6 +220,7 @@ class Profile:
         plt.xlabel('Po, kPa')
         plt.grid()
         plt.show()
+        #
      # ---------------------------------------------------
         plt.plot(self.C,self.depth)
         plt.plot(self.Fi,self.depth)
