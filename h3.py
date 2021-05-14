@@ -151,6 +151,9 @@ class Profile:
         self.depth = []
         self.p = []
         self.p_ = []
+        self.g  = []
+        self.C  = []
+        self.Fi = []
 # ----------------------------------------------------------------
     def setTop(self,v):
         h = self.top - self.bot
@@ -185,16 +188,17 @@ class Profile:
                 flag=False
         return
 # ----------------------------------------------------------------
-    def P0(self, inc):
+    def setP0(self):
         pcum=0.0; p_cum=0.0
         g=0.0; gg=0.0
-        dv=[]
         
-        d=self.top
-        flag = True
-
-        while flag:
-            pcum  += g * -inc; p_cum += gg * -inc
+        inc = 0
+        dold = self.depth[0]
+        for d in self.depth:
+            inc = abs(dold - d)
+            pcum  += g * inc; 
+            p_cum += gg * inc
+            dold = d
             l = self.getLayer(d)
             g = l.gamma(d)
             if d <= self.gwt:
@@ -203,16 +207,46 @@ class Profile:
                 gg=g
             self.p.append(pcum)
             self.p_.append(p_cum)
-            dv.append(d)
+            
     # ---------------------------------------------------
             print("{:.2f}\t{:.2f}\t{:.2f}".format(d,g,pcum))
     # ---------------------------------------------------
-            d=d+inc
-            if d < self.bot or d > self.top:
-                flag=False
+        plt.plot(self.p,self.depth)
+        plt.plot(self.p_,self.depth)
+        plt.ylabel('Depth, m')
+        plt.xlabel('Po, kPa')
+        plt.grid()
+        plt.show()
+        return
+# ----------------------------------------------------------------
+    def setProps(self):
+        pcum=0.0; p_cum=0.0
+        g=0.0; gg=0.0
+        
+        inc = 0
+        dold = self.depth[0]
+        for d in self.depth:
+            inc = abs(dold - d)
+            pcum  += g * inc; 
+            p_cum += gg * inc
+            dold = d
+            l = self.getLayer(d)
+            g = l.gamma(d)
+            C=l.C
+
+            self.g.append(g)
+            self.C.append(l.C())
+            self.Fi.append(l.Fi())
+
+            if d <= self.gwt:
+                gg = g - 9.81
+            else:
+                gg=g
     # ---------------------------------------------------
-        plt.plot(self.p,dv)
-        plt.plot(self.p_,dv)
+            print("{:.2f}\t{:.2f}\t{:.2f}\t{:.2f}".format(d,g,l.C(),l.Fi()))
+    # ---------------------------------------------------
+        plt.plot(self.C,self.depth)
+        plt.plot(self.Fi,self.depth)
         plt.ylabel('Depth, m')
         plt.xlabel('Po, kPa')
         plt.grid()
@@ -250,4 +284,6 @@ if __name__ == "__main__":
     pr.current_layer.set_Fi(33,inc=.5)
     pr.gwt = -3
     pr.print()
-    pr.P0(-.1)
+    pr.setDepth(-.1)
+    pr.setP0()
+    pr.setProps()
