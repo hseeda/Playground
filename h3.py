@@ -188,7 +188,7 @@ class Profile:
         dold = self.depth[0]
         for d in self.depth:
             inc = abs(dold - d)
-            pcum  += g * inc; 
+            pcum  += g  * inc
             p_cum += gg * inc
             dold = d
             l = self.getLayer(d)
@@ -236,16 +236,19 @@ if __name__ == "__main__":
     # print(p1.Fi())
     # p2 = p1.after("Clay",7)
     # print(p2.__dict__)
-
+    #--------------------------------
     pr = Profile("Profile_1")
+    #--------------------------------
     pr.addLayer("Sand_1",5)
     pr.current_layer.set_gamma(17,19)
     pr.current_layer.set_Fi(30,inc=.5)
 
+    #--------------------------------
     pr.addLayer("Clay",5)
     pr.current_layer.set_gamma(14,17)
     pr.current_layer.set_C(20,inc=5)
 
+    #--------------------------------
     pr.addLayer("Sand_2",8)
     pr.current_layer.set_gamma(18,19)
     pr.current_layer.set_Fi(33,inc=.5)
