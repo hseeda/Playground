@@ -195,7 +195,6 @@ class Profile:
         inc = 0
         dold = self.depth[0]
         for d in self.depth:
-            print(d)
             inc = abs(dold - d)
             pcum  += g * inc; 
             p_cum += gg * inc
