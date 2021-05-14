@@ -195,6 +195,7 @@ class Profile:
         inc = 0
         dold = self.depth[0]
         for d in self.depth:
+            print(d)
             inc = abs(dold - d)
             pcum  += g * inc; 
             p_cum += gg * inc
@@ -205,9 +206,11 @@ class Profile:
                 gg = g - 9.81
             else:
                 gg=g
+            self.g.append(gg)
+            self.C.append(l.C(d))
+            self.Fi.append(l.Fi(d))           
             self.p.append(pcum)
             self.p_.append(p_cum)
-            
     # ---------------------------------------------------
             print("{:.2f}\t{:.2f}\t{:.2f}".format(d,g,pcum))
     # ---------------------------------------------------
@@ -217,6 +220,13 @@ class Profile:
         plt.xlabel('Po, kPa')
         plt.grid()
         plt.show()
+     # ---------------------------------------------------
+        plt.plot(self.C,self.depth)
+        plt.plot(self.Fi,self.depth)
+        plt.ylabel('Depth, m')
+        plt.xlabel('Po, kPa')
+        plt.grid()
+        plt.show()       
         return
 # ----------------------------------------------------------------
     def setProps(self):
@@ -232,7 +242,7 @@ class Profile:
             dold = d
             l = self.getLayer(d)
             g = l.gamma(d)
-            C=l.C
+
 
             self.g.append(g)
             self.C.append(l.C())
@@ -286,4 +296,3 @@ if __name__ == "__main__":
     pr.print()
     pr.setDepth(-.1)
     pr.setP0()
-    pr.setProps()
